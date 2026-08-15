@@ -1,0 +1,150 @@
+cabal-version:      3.0
+name:               cliff
+version:            0.1.0.0
+synopsis:           High-performance, zero-dependency Clifford Algebra library in pure Haskell
+description:        A type-safe, general-purpose Geometric Algebra (Clifford Algebra) library
+                    parameterized over arbitrary signatures Cl(p,q,r) and scalar fields (R, C, Q, GF2, GFp, GF2m).
+                    Built entirely on standard GHC boot libraries (base, array, containers, deepseq).
+homepage:           https://github.com/tdixon/cliff
+bug-reports:        https://github.com/tdixon/cliff/issues
+category:           Math, Algebra, Data, Numerical
+license:            BSD-3-Clause
+license-file:       LICENSE
+author:             Tom Dixon
+maintainer:         tomgdixon@gmail.com
+tested-with:        GHC == 9.4.8, GHC == 9.6.5, GHC == 9.8.2, GHC == 9.10.1, GHC == 9.12.1
+build-type:         Simple
+extra-doc-files:    README.md
+                  , CHANGELOG.md
+                  , docs/TUTORIAL.md
+
+source-repository head
+    type:     git
+    location: https://github.com/tomgdixon/cliff
+
+common common-options
+    default-language:   GHC2021
+    ghc-options:        -Wall
+                        -Wcompat
+                        -Widentities
+                        -Wincomplete-record-updates
+                        -Wincomplete-uni-patterns
+                        -Wpartial-fields
+                        -Wredundant-constraints
+                        -O2
+                        -fspecialise-aggressively
+                        -fexpose-all-unfoldings
+    default-extensions: BangPatterns
+                        DataKinds
+                        DeriveGeneric
+                        DerivingStrategies
+                        FlexibleContexts
+                        FlexibleInstances
+                        FunctionalDependencies
+                        GADTs
+                        GeneralizedNewtypeDeriving
+                        KindSignatures
+                        MultiParamTypeClasses
+                        RankNTypes
+                        ScopedTypeVariables
+                        StandaloneDeriving
+                        TypeFamilies
+                        TypeOperators
+                        UnboxedTuples
+
+library
+    import:             common-options
+    hs-source-dirs:     src
+    exposed-modules:    Clifford
+                        Clifford.Signature
+                        Clifford.Blade
+                        Clifford.Field
+                        Clifford.Class
+                        Clifford.Dense
+                        Clifford.Sparse
+                        Clifford.Versor
+                        Clifford.Array.Tensor
+                        Clifford.Array.Matrix
+                        Clifford.Array.Convolution
+                        Clifford.Array.Fourier
+                        Clifford.Analytic
+    build-depends:      base >= 4.16 && < 5
+                      , array >= 0.5 && < 0.7
+                      , containers >= 0.6 && < 0.9
+                      , deepseq >= 1.4 && < 1.7
+
+test-suite cliff-test
+    import:             common-options
+    type:               exitcode-stdio-1.0
+    hs-source-dirs:     test
+    main-is:            Main.hs
+    other-modules:      Test.Arbitrary
+                        Test.AlgebraLawsSpec
+                        Test.RepresentationSpec
+                        Test.FieldSpec
+                        Test.VersorSpec
+                        Test.PGASpec
+                        Test.MatrixSpec
+                        Test.StencilSpec
+                        Test.IndependentOracleSpec
+                        Test.FFTOracleData
+                        Test.HighGradeSpec
+                        Test.AnalyticSpec
+                        Test.FWHTSpec
+    build-depends:      base
+                      , cliff
+                      , array
+                      , containers
+                      , QuickCheck >= 2.14
+                      , tasty >= 1.4
+                      , tasty-hunit >= 0.10
+                      , tasty-quickcheck >= 0.10
+    ghc-options:        -threaded -rtsopts -with-rtsopts=-N
+
+benchmark cliff-bench
+    import:             common-options
+    type:               exitcode-stdio-1.0
+    hs-source-dirs:     bench
+    main-is:            Bench.hs
+    build-depends:      base
+                      , cliff
+                      , array
+                      , tasty-bench >= 0.3
+    ghc-options:        -threaded -rtsopts -with-rtsopts=-N
+
+executable example-basics
+    import:             common-options
+    hs-source-dirs:     examples
+    main-is:            01_Basics.hs
+    build-depends:      base, cliff
+
+executable example-rotors
+    import:             common-options
+    hs-source-dirs:     examples
+    main-is:            02_RotationsAndRotors.hs
+    build-depends:      base, cliff
+
+executable example-pga
+    import:             common-options
+    hs-source-dirs:     examples
+    main-is:            03_PGA_Kinematics.hs
+    build-depends:      base, cliff
+
+executable example-galois
+    import:             common-options
+    hs-source-dirs:     examples
+    main-is:            04_GaloisAndHighDim.hs
+    build-depends:      base, cliff
+
+executable example-cliffordnet
+    import:             common-options
+    hs-source-dirs:     examples
+    main-is:            05_CliffordNet_Attention.hs
+    build-depends:      base, cliff, array
+
+executable example-stencils
+    import:             common-options
+    hs-source-dirs:     examples
+    main-is:            06_ImageFiltering.hs
+    build-depends:      base, cliff
+

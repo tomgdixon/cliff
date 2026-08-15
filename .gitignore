@@ -1,0 +1,25 @@
+# Cabal / GHC Build Artifacts
+dist/
+dist-*
+dist-newstyle/
+.ghc.environment.*
+*.o
+*.hi
+*.dyn_o
+*.dyn_hi
+*.p_o
+*.p_hi
+*.a
+*.so
+*.dylib
+*.dll
+*.hpc
+.hpc/
+*.prof
+*.eventlog
+*.hp
+
+# Editors & IDEs
+*.swp
+*.swo
+*~
